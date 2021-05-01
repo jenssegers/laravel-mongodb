@@ -19,6 +19,10 @@
             <file>tests/QueryBuilderTest.php</file>
             <file>tests/QueryTest.php</file>
         </testsuite>
+        <testsuite name="transaction">
+            <file>tests/TransactionBuilderTest.php</file>
+            <file>tests/TransactionTest.php</file>
+        </testsuite>
         <testsuite name="model">
             <file>tests/ModelTest.php</file>
             <file>tests/RelationsTest.php</file>
@@ -36,6 +40,7 @@
     </testsuites>
     <php>
         <env name="MONGO_HOST" value="mongodb"/>
+        <env name="MONGO_REPL_HOST" value="mongodb_repl"/>
         <env name="MONGO_DATABASE" value="unittest"/>
         <env name="MONGO_PORT" value="27017"/>
         <env name="MYSQL_HOST" value="mysql"/>
