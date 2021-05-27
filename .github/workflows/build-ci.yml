@@ -28,6 +28,26 @@ jobs:
             -   name: Run PHP-CS-Fixer Fix, version ${{ env.PHP_CS_FIXER_VERSION }}
                 run: php-cs-fixer fix --dry-run --diff --ansi
 
+    phpstan:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                php:
+                    - '7.4'
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v2
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php }}
+                    extensions: curl,mbstring
+                    coverage: none
+            -   name: Install dependencies
+                run: composer install --no-interaction
+            -   name: Run PHPStan Analysis
+                run: ./vendor/bin/phpstan analyse --no-interaction --no-progress --ansi
+
     build:
         runs-on: ${{ matrix.os }}
         name: PHP v${{ matrix.php }} with Mongo v${{ matrix.mongodb }}

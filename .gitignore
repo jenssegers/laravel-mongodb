@@ -6,6 +6,7 @@
 .phpunit.result.cache
 /.php_cs
 /.php_cs.cache
+/phpstan.neon
 /vendor
 composer.lock
 composer.phar
