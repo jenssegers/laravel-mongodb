@@ -122,7 +122,15 @@ trait QueriesRelationships
      */
     protected function getConstrainedRelatedIds($relations, $operator, $count)
     {
-        $relationCount = array_count_values(array_map(function ($id) {
+        $intHash = 'INT_RELATION_';
+        $hasNumericIndex = false;
+        $relationCount = array_count_values(array_map(function ($id) use ($intHash, &$hasNumericIndex) {
+            if (! is_string($id) && is_int($id)) {
+                $hasNumericIndex = true;
+
+                return $intHash.$id;
+            }
+
             return (string) $id; // Convert Back ObjectIds to Strings
         }, is_array($relations) ? $relations : $relations->flatten()->toArray()));
         // Remove unwanted related objects based on the operator and count.
@@ -145,7 +153,18 @@ trait QueriesRelationships
         });
 
         // All related ids.
-        return array_keys($relationCount);
+        if (! $hasNumericIndex) {
+            return array_keys($relationCount);
+        }
+
+        // Has any numeric index?
+        return array_map(static function ($id) use ($intHash) {
+            if (strpos($id, $intHash, 0) === 0) {
+                return (int) str_replace($intHash, '', $id);
+            }
+
+            return (string) $id;
+        }, array_keys($relationCount));
     }
 
     /**
